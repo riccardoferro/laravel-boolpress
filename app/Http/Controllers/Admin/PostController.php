@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Post;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,17 @@ class PostController extends Controller
     public function index()
     {
         //
+
+        $posts = Post::all();
+
+        return view('admin.posts.index', compact('posts'));
     }
+
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -25,7 +41,15 @@ class PostController extends Controller
     public function create()
     {
         //
+
+        return view(('admin.posts.create'));
     }
+
+
+
+
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -35,8 +59,55 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        // validations datas
+        $request->validate([
+            'title'=>'required|max:250',
+            'content'=>'required'
+        ]);
+
+        $DatasPost = $request->all();
+        
+        $newPost = new Post();
+
+        $newPost->fill($DatasPost);
+
+
+
+
+        $slug = Str::slug($newPost->title);
+
+        $alternativeSlug = $slug;
+
+        // andiamo ad interrogare il DB per vedere se esiste gia' questo slug
+
+        // where 'slug' = $slug
+        $postFound = Post::where('slug',$slug)->first();
+        
+        $counter = 1;
+
+        while($postFound){
+            $alternativeSlug = $slug . '_' . $counter;
+            $counter++;
+            $postFound = Post::where('slug',$alternativeSlug)->first();
+        }
+
+        $newPost->slug = $alternativeSlug;
+
+
+
+        $newPost->save();
+
+        return redirect()->route('admin.posts.index');
     }
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -44,10 +115,19 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        // //
+        // $post = Post::findOrFail($id);
+
+        return view('admin.posts.show', compact('post'));
+        
     }
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -55,10 +135,17 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit',compact('post'));
     }
+
+
+    
+
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -67,10 +154,48 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Post $post)
     {
-        //
+        $data = $request->all();
+
+        $post->fill($data);
+
+
+
+        $slug = Str::slug($post->title);
+
+        $alternativeSlug = $slug;
+
+        // andiamo ad interrogare il DB per vedere se esiste gia' questo slug
+
+        // where 'slug' = $slug
+        $postFound = Post::where('slug',$slug)->first();
+        
+        $counter = 1;
+
+        while($postFound){
+            $alternativeSlug = $slug . '_' . $counter;
+            $counter++;
+            $postFound = Post::where('slug',$alternativeSlug)->first();
+        }
+
+        $post->slug = $alternativeSlug;
+
+
+
+
+        $post->save();
+
+        return redirect()->route('admin.posts.show',compact('post'));
     }
+
+
+
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -78,8 +203,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('admin.posts.index');
+
+
     }
 }
