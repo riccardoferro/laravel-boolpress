@@ -7,6 +7,8 @@ use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use illuminate\Support\Str;
+
 class PostController extends Controller
 {
 
@@ -22,8 +24,10 @@ class PostController extends Controller
     {
         //
 
+        // Here we take all the posts
         $posts = Post::all();
 
+        // Here return the view Index passing by parameter the object posts
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -42,7 +46,7 @@ class PostController extends Controller
     {
         //
 
-        return view(('admin.posts.create'));
+        return view('admin.posts.create');
     }
 
 
@@ -119,6 +123,9 @@ class PostController extends Controller
     {
         // //
         // $post = Post::findOrFail($id);
+        if (!$post){
+            abort(404);
+        }
 
         return view('admin.posts.show', compact('post'));
         
@@ -137,11 +144,16 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+
+        if (!$post){
+            abort(404);
+        }
+
         return view('admin.posts.edit',compact('post'));
     }
 
 
-    
+
 
 
 
@@ -156,7 +168,14 @@ class PostController extends Controller
      */
     public function update(Request $request,Post $post)
     {
+
+        $request->validate([
+            'title'=>'required|max:250',
+            'content'=>'required'
+        ]);
+
         $data = $request->all();
+
 
         $post->fill($data);
 

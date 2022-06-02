@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-// route for the authentications create automatically
+// route for the authentications create automatically by laravel
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
@@ -28,15 +30,21 @@ Route::middleware('auth')
     ->name('admin.')
     ->prefix('admin')
     ->group(function(){
-        // se uno e' autenticato ed e' un admin va in quell'home 
-        Route::get('/','HomeController@index')
-        ->name('home');
+
+        //insert controller under the folder/uri admin
+        // if someone is authenticated and is an admin go in the home
+        Route::get('/','HomeController@index')->name('index');
+
+        // routes for the resources posts(CRUD)
+        Route::resource('/posts','PostController');
+
     });
-// altrimenti ci buttera' al login
+
+// else we'll go to the login
 
 
 
-// qualsiasi altro tentativo di accesso verra' portato nella home guest
+// other attempts of access will put to the guest's home
 Route::get("{any?}",function(){
 
         return view('guest.home');
