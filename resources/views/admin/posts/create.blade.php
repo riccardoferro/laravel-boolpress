@@ -28,6 +28,7 @@
                 </div>
 
                 <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
+                    {{-- csrf token to control that datas comes from our site --}}
                     @csrf
 
                     <div class="form-group">
@@ -42,11 +43,7 @@
                     <div class="form-group">
                         <label> Contenuto </label>
                         <textarea name="content" class="form-control @error('content') is-invalid @enderror" rows="10"
-                            placeholder="inizia a scrivere qualcosa..." required>
-                        
-                            {{ old('content') }}
-
-                        </textarea>
+                            placeholder="inizia a scrivere qualcosa..." required>{{ old('content') }}</textarea>
 
                         @error('content')
                             <div class="invalid-feedback"> {{ $message }} </div>
