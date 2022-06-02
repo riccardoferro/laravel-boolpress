@@ -16,7 +16,11 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+                <a href="{{ route('admin.posts.index') }}" class="btn btn-primary">
+                    Tutti i posts
+                </a>
             </div>
+            
         </div>
     </div>
 </div>
