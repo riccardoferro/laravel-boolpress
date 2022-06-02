@@ -76,29 +76,7 @@ class PostController extends Controller
 
         $newPost->fill($DatasPost);
 
-
-
-
-        $slug = Str::slug($newPost->title);
-
-        $alternativeSlug = $slug;
-
-        // andiamo ad interrogare il DB per vedere se esiste gia' questo slug
-
-        // where 'slug' = $slug
-        $postFound = Post::where('slug',$slug)->first();
-        
-        $counter = 1;
-
-        while($postFound){
-            $alternativeSlug = $slug . '_' . $counter;
-            $counter++;
-            $postFound = Post::where('slug',$alternativeSlug)->first();
-        }
-
-        $newPost->slug = $alternativeSlug;
-
-
+        $newPost->slug = Post::convertToSlug($newPost->title);
 
         $newPost->save();
 
@@ -122,10 +100,11 @@ class PostController extends Controller
     public function show(Post $post)
     {
         // //
-        // $post = Post::findOrFail($id);
+        // $post = Post::find($id);
         if (!$post){
             abort(404);
         }
+        // oppure senza il find e l'if si poteva direttamente mettere $post = Post::findOrFail($id)
 
         return view('admin.posts.show', compact('post'));
         
@@ -149,6 +128,7 @@ class PostController extends Controller
             abort(404);
         }
 
+        // view of a page edit to change the datas passing by parameter the data '$post' 
         return view('admin.posts.edit',compact('post'));
     }
 
@@ -168,7 +148,7 @@ class PostController extends Controller
      */
     public function update(Request $request,Post $post)
     {
-
+        // here we check if the request(the datas) ara valid
         $request->validate([
             'title'=>'required|max:250',
             'content'=>'required'
@@ -179,33 +159,11 @@ class PostController extends Controller
 
         $post->fill($data);
 
+        $post->slug = Post::convertToSlug($post->title);
 
+        $post->update();
 
-        $slug = Str::slug($post->title);
-
-        $alternativeSlug = $slug;
-
-        // andiamo ad interrogare il DB per vedere se esiste gia' questo slug
-
-        // where 'slug' = $slug
-        $postFound = Post::where('slug',$slug)->first();
-        
-        $counter = 1;
-
-        while($postFound){
-            $alternativeSlug = $slug . '_' . $counter;
-            $counter++;
-            $postFound = Post::where('slug',$alternativeSlug)->first();
-        }
-
-        $post->slug = $alternativeSlug;
-
-
-
-
-        $post->save();
-
-        return redirect()->route('admin.posts.show',compact('post'));
+        return redirect()->route('admin.posts.index');
     }
 
 
