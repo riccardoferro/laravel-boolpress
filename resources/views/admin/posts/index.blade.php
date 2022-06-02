@@ -35,25 +35,26 @@
                                           <td> {{ $post->id }} </td>
                                           <td> {{ $post->title }} </td>
                                           <td> {{ $post->slug }} </td>
-
+                                          <td>
                                           {{-- here we want with a link show a detail of the post,
                                               we sent to the view posts.show the post id  --}}
-                                          {{-- <td>
-                                              <a href="{{ route('posts.show',$post->id) }}"> Detail </a>
+                                          <td>
+                                              <a href="{{ route('admin.posts.show',$post->id) }}"> DET </a>
                                           </td>
 
                                           <td>
-                                              <a href="{{ route('posts.edit',$post->id) }}"> Edit </a>
-                                          </td> --}}
+                                              <a href="{{ route('admin.posts.edit',$post->id) }}"> EDI </a>
+                                          </td>
 
-                                          {{-- <td>
-                                              <form action="{{ route('posts.destroy', $post )}}" method="POST">
+                                          <td>
+                                              <form action="{{ route('admin.posts.destroy', $post )}}" method="POST">
                                                       @csrf
                                                       @method('DELETE')
                                               
-                                                      <input class="deleteBtn" type="submit" value="delete">
+                                                      <input class="deleteBtn" type="submit" value="DEL">
                                                   </form>  
-                                          </td> --}}
+                                          </td>
+                                        </td>
                                       </tr> 
                             @endforeach
                     </tbody>
