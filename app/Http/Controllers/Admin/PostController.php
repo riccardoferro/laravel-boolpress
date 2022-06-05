@@ -116,7 +116,12 @@ class PostController extends Controller
         }
         // oppure senza il find e l'if si poteva direttamente mettere $post = Post::findOrFail($id)
 
-        return view('admin.posts.show', compact('post'));
+
+
+        $category = Category::find($post->category_id);
+
+
+        return view('admin.posts.show', compact('post','category'));
         
     }
 

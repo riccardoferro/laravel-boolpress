@@ -16,11 +16,14 @@
 
                 <dl>
                     <dt>Titolo</dt>
-                    <dd>{{ $post->title}}</dd>
+                    <dd>{{ $post->title }}</dd>
                     <dt>Slug</dt>
-                    <dd>{{ $post->slug}}</dd>
+                    <dd>{{ $post->slug }}</dd>
+                    <dt>Categoria</dt>
+                    <dd>{{ $category->name }}</dd>
                     <dt>Contenuto</dt>
-                    <dd>{{ $post->content}}</dd>
+                    <dd>{{ $post->content }}</dd>
+                    
                 </dl>
 
 
