@@ -20,14 +20,19 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // route for the authentications create automatically by laravel
-Auth::routes();
+Auth::routes(['register'=>false,'reset'=>false,'verify'=>false]);
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
-
+// 'auth' solo utente autorizzato
 Route::middleware('auth')
+
     ->namespace('Admin')
+
+    // rotte che cominciano con admin.
     ->name('admin.')
+
+    // con uri che cominciano con admin
     ->prefix('admin')
     ->group(function(){
 
@@ -50,3 +55,4 @@ Route::get("{any?}",function(){
         return view('guest.home');
     
 })->where(" any "," .* ");
+
