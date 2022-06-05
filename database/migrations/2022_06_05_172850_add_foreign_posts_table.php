@@ -13,13 +13,15 @@ class AddForeignPostsTable extends Migration
      */
     public function up()
     {
-        //
+        //with the property table we edit the table posts
         Schema::table('posts', function(Blueprint $table) {
+            // here we create the column
             $table->unsignedBigInteger(('category_id'));
-
-            $table->foreign('user_id')
+ 
+            // here we say what table the column refers to
+            $table->foreign('category_id')
                 ->references('id')
-                ->on('posts');
+                ->on('categories');
 
          });
     }
@@ -32,5 +34,12 @@ class AddForeignPostsTable extends Migration
     public function down()
     {
         //
+        Schema::table('posts', function(Blueprint $table) {
+            // here we eliminate the column, dropForeign(nometabella_colonnaDellaTabella_foreign)
+            $table->dropForeign(('posts_category_id_foreign'));
+            $table->dropColumn('category_id');
+            
+
+         });
     }
 }
