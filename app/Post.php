@@ -9,7 +9,7 @@ class Post extends Model
 {
     //
     // here we insert the datas also with the property slug 
-    protected $fillable = ['title','content','slug'];
+    protected $fillable = ['title','content','slug','category_id'];
 
 
 
@@ -35,6 +35,14 @@ class Post extends Model
         }
 
         return $Slug;
+    }
+
+
+    
+    public function category() {
+
+        return $this->belongsTo('App\Category');
+
     }
 
 
