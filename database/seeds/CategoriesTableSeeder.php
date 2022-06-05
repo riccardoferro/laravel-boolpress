@@ -14,6 +14,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
+        //we can also take this datas from the folder
         $categories = ['Spa','Trattamenti','Cibo','Wellness'];
 
 

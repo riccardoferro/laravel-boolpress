@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
-
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -45,8 +45,9 @@ class PostController extends Controller
     public function create()
     {
         //
+        $categories = Category::all();
 
-        return view('admin.posts.create');
+        return view('admin.posts.create',compact('categories'));
     }
 
 
@@ -67,13 +68,15 @@ class PostController extends Controller
         // validations datas
         $request->validate([
             'title'=>'required|max:250',
-            'content'=>'required|min:5|max:100'
+            'content'=>'required|min:5|max:100',
+            'category_id'=>'required|exists:categories,id'
         ],[
             'title.required' => 'Titolo deve essere valorizzato',
             'title.max' => 'Hai superato i 250 caratter',
             'content.required' => ':attribute deve avere minimo essere compilato ',
             'content.min' => 'Il contenuto deve avere almeno :min caratteri',
             'content.max' => 'Il contenuto deve avere almeno :max caratteri',
+            'category.exists'=>'La categoria selezionata non esiste'
 
         ]);
 
@@ -135,8 +138,11 @@ class PostController extends Controller
             abort(404);
         }
 
+        $categories = Category::all();
+
+
         // view of a page edit to change the datas passing by parameter the data '$post' 
-        return view('admin.posts.edit',compact('post'));
+        return view('admin.posts.edit',compact('post','categories'));
     }
 
 
@@ -158,7 +164,16 @@ class PostController extends Controller
         // here we check if the request(the datas) ara valid
         $request->validate([
             'title'=>'required|max:250',
-            'content'=>'required'
+            'content'=>'required',
+            'category_id'=>'required|exists:categories,id'
+        ],[
+            'title.required' => 'Titolo deve essere valorizzato',
+            'title.max' => 'Hai superato i 250 caratter',
+            'content.required' => ':attribute deve avere minimo essere compilato ',
+            'content.min' => 'Il contenuto deve avere almeno :min caratteri',
+            'content.max' => 'Il contenuto deve avere almeno :max caratteri',
+            'category.exists'=>'La categoria selezionata non esiste'
+
         ]);
 
         $data = $request->all();
