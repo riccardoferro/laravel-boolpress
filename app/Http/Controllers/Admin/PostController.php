@@ -67,7 +67,14 @@ class PostController extends Controller
         // validations datas
         $request->validate([
             'title'=>'required|max:250',
-            'content'=>'required'
+            'content'=>'required|min:5|max:100'
+        ],[
+            'title.required' => 'Titolo deve essere valorizzato',
+            'title.max' => 'Hai superato i 250 caratter',
+            'content.required' => ':attribute deve avere minimo essere compilato ',
+            'content.min' => 'Il contenuto deve avere almeno :min caratteri',
+            'content.max' => 'Il contenuto deve avere almeno :max caratteri',
+
         ]);
 
         $DatasPost = $request->all();
