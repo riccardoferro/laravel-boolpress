@@ -38,10 +38,20 @@ class Post extends Model
     }
 
 
-    
+    // relation with the model category
     public function category() {
 
+        // here he return an object
         return $this->belongsTo('App\Category');
+
+    }
+
+
+    // relation with the model Tag
+    public function tags() {
+
+        // here he return an array, we'll have a lot of tags
+        return $this->belongsToMany('App\Tag');
 
     }
 
