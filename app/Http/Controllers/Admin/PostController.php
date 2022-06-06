@@ -116,12 +116,24 @@ class PostController extends Controller
         }
         // oppure senza il find e l'if si poteva direttamente mettere $post = Post::findOrFail($id)
 
+        // $category = Category::find($post->category_id);
+
+        // return view('admin.posts.show', compact('post','category'));
 
 
-        $category = Category::find($post->category_id);
+        // questi due dump non sono uguali, quando facciamo "$post->category" prendera' il campo "#related" del "$post->category()" 
+        // accedere alla funzione o alla proprieta' ritorna oggetti di classe diversi
+        // usare la proprieta' per accedere alla tabella associata
+        
+        //dump($post->category)
+        //dd($post->category())
 
 
-        return view('admin.posts.show', compact('post','category'));
+        // dump($post);
+        // dd($post->category);
+
+        return view('admin.posts.show', compact('post'));
+
         
     }
 
