@@ -20,7 +20,7 @@
                     <dt>Slug</dt>
                     <dd>{{ $post->slug }}</dd>
                     <dt>Categoria</dt>
-                    <dd>{{ $category->name }}</dd>
+                    <dd>{{ $post->category->name }}</dd>
                     <dt>Contenuto</dt>
                     <dd>{{ $post->content }}</dd>
                     
