@@ -57,6 +57,12 @@
                         @enderror
                     </div>
 
+
+                    <div class="form-group">
+                        <label for='image'> Immagine cover </label>
+                        <input type="file" name="image"/>
+                    </div>
+
                     <div class="form-group">
                         <label> Contenuto </label>
                         <textarea name="content" class="form-control @error('content') is-invalid @enderror" rows="10"
