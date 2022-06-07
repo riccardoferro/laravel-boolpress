@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Category;
+use App\Tag;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -47,7 +49,11 @@ class PostController extends Controller
         //
         $categories = Category::all();
 
-        return view('admin.posts.create',compact('categories'));
+        // take all the tags
+        $tags = Tag::all();
+
+
+        return view('admin.posts.create',compact('categories','tags'));
     }
 
 
@@ -69,14 +75,16 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|max:250',
             'content'=>'required|min:5|max:100',
-            'category_id'=>'required|exists:categories,id'
+            'category_id'=>'required|exists:categories,id',
+            'tags[]'=>'exists:tags,id'
         ],[
             'title.required' => 'Titolo deve essere valorizzato',
             'title.max' => 'Hai superato i 250 caratter',
             'content.required' => ':attribute deve avere minimo essere compilato ',
             'content.min' => 'Il contenuto deve avere almeno :min caratteri',
             'content.max' => 'Il contenuto deve avere almeno :max caratteri',
-            'category.exists'=>'La categoria selezionata non esiste'
+            'category.exists'=>'La categoria selezionata non esiste',
+            'tags[]' =>'Tag non esiste'
 
         ]);
 
@@ -87,6 +95,17 @@ class PostController extends Controller
         $newPost->fill($DatasPost);
 
         $newPost->slug = Post::convertToSlug($newPost->title);
+
+        //se si vuole valorizzare qualcosa con l'id del nuovo post prima deve essere salvato
+        $newPost->save();
+
+
+        // add tags
+        if (array_key_exists('tags',$DatasPost)){
+            // dd($DatasPost['tags']);
+            // insert new datas  
+            $newPost->tags()->sync($DatasPost['tags']);
+        }
 
         $newPost->save();
 
@@ -157,9 +176,10 @@ class PostController extends Controller
 
         $categories = Category::all();
 
+        $tags = Tag::all();
 
         // view of a page edit to change the datas passing by parameter the data '$post' 
-        return view('admin.posts.edit',compact('post','categories'));
+        return view('admin.posts.edit',compact('post','categories','tags'));
     }
 
 
@@ -181,16 +201,17 @@ class PostController extends Controller
         // here we check if the request(the datas) ara valid
         $request->validate([
             'title'=>'required|max:250',
-            'content'=>'required',
-            'category_id'=>'required|exists:categories,id'
+            'content'=>'required|min:5|max:100',
+            'category_id'=>'required|exists:categories,id',
+            'tags'=>'exists:tags,id'
         ],[
             'title.required' => 'Titolo deve essere valorizzato',
             'title.max' => 'Hai superato i 250 caratter',
             'content.required' => ':attribute deve avere minimo essere compilato ',
             'content.min' => 'Il contenuto deve avere almeno :min caratteri',
             'content.max' => 'Il contenuto deve avere almeno :max caratteri',
-            'category.exists'=>'La categoria selezionata non esiste'
-
+            'category.exists'=>'La categoria selezionata non esiste',
+            'tags' =>'Tag non esistente'
         ]);
 
         $data = $request->all();
@@ -199,6 +220,17 @@ class PostController extends Controller
         $post->fill($data);
 
         $post->slug = Post::convertToSlug($post->title);
+
+
+        // add tags
+        if (array_key_exists('tags',$data)){
+            // dd($data['tags']);
+            // insert new datas  
+            $post->tags()->sync($data['tags']);
+        }else{
+            $post->tags()->sync([]);
+        }
+
 
         $post->update();
 
@@ -221,8 +253,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
 
+        if ($post){
+
+            $post->tags()->sync([]);
+
+            $post->delete();
+        }
         return redirect()->route('admin.posts.index');
 
 

@@ -22,8 +22,9 @@
                                     <td>ID</td>
                                     <td>Title</td>
                                     <td>Categoria</td>
+                                    <td>Tags</td>
                                     <td>Slug</td>
-                                    <td>Azioni</td>
+                                    <td class="text-center">Azioni</td>
                             </tr>
                     </thead>
 
@@ -36,6 +37,11 @@
                                           <td> {{ $post->id }} </td>
                                           <td> {{ $post->title }} </td>
                                           <td> {{ $post->category->name }} </td>
+                                          <td>
+                                                @foreach ($post->tags as $tag)
+                                                    <span>{{ $tag->name }}</span>
+                                                @endforeach
+                                          </td>
                                           <td> {{ $post->slug }} </td>
                                           <td>
                                           {{-- here we want with a link show a detail of the post,

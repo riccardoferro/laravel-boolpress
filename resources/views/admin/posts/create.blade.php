@@ -42,11 +42,11 @@
 
                     <div class="form-group">
                         <label> Categoria </label>
-                        <select name="category_id" class="@error('category_id') is-invalid @enderror>
+                        <select name="category_id" class="@error('category_id') is-invalid @enderror">
                             <option value="">--Scegli Categoria--</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" 
-                                    {{ $category->id = old('category_id') ? 'selected' : ''}}
+                                    {{ $category->id == old('category_id') ? 'selected' : ''}}
                                 > 
                                     {{$category->name}} 
                                 </option>
@@ -66,6 +66,23 @@
                             <div class="invalid-feedback"> {{ $message }} </div>
                         @enderror
                     </div>
+
+
+                    <div class="form-group">
+                        <div> Tags </div>
+                        @foreach ($tags as $tag)
+                        {{-- name is an array --}}
+                                <input class="form-check-input" type="checkbox" value="{{ $tag->id }}" name="tags[]" 
+                                    {{ in_array($tag->id,old('tags',[])) ? 'checked' : '' }}
+                                /> 
+                                <div class="form-check-label"> {{ $tag->name }} </div>
+                        @endforeach
+
+                        @error('tags[]')
+                            <div class="invalid-feedback"> {{ $message }} </div>
+                        @enderror
+                    </div>
+
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
