@@ -15,8 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+    // this return will give the user's informations, the user have to be authenticated
     return $request->user();
 });
 
+//
 Route::get('/posts', 'Api\PostController@index')->name('posts.index');
+
+//
+Route::get('/categories', 'Api\CategoryController@index')->name('categories.index');
+
+Route::get('/categories/{post}', 'Api\CategoryController@show')->name('categories.show');
 
