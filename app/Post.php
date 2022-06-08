@@ -9,7 +9,7 @@ class Post extends Model
 {
     //
     // here we insert the datas also with the property slug 
-    protected $fillable = ['title','content','slug','category_id'];
+    protected $fillable = ['title','content','slug','category_id','cover'];
 
 
 

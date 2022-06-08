@@ -9,6 +9,8 @@ use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
+
 use illuminate\Support\Str;
 
 class PostController extends Controller
@@ -76,7 +78,8 @@ class PostController extends Controller
             'title'=>'required|max:250',
             'content'=>'required|min:5|max:100',
             'category_id'=>'required|exists:categories,id',
-            'tags[]'=>'exists:tags,id'
+            'tags[]'=>'exists:tags,id',
+            'image'=>'nullable|image'  // required|mimes:pdf,xlx,csv|max:2048
         ],[
             'title.required' => 'Titolo deve essere valorizzato',
             'title.max' => 'Hai superato i 250 caratter',
@@ -84,13 +87,23 @@ class PostController extends Controller
             'content.min' => 'Il contenuto deve avere almeno :min caratteri',
             'content.max' => 'Il contenuto deve avere almeno :max caratteri',
             'category.exists'=>'La categoria selezionata non esiste',
-            'tags[]' =>'Tag non esiste'
+            'tags[]' =>'Tag non esiste',
+            'image'=>'Il file deve essere un immagine'
+
 
         ]);
 
         $DatasPost = $request->all();
         
+        if(array_key_exists('image',$DatasPost)){
+                $img_path = Storage::put('uploads',$DatasPost['image']);
+                $DatasPost['cover'] = $img_path;
+        }
+
         $newPost = new Post();
+
+        // se facciamo questo comando dobbiamo tofliere il $DatasPost sopra nell'if e tofliere anche 'cover' dal modello post
+        // $newPost->cover = $img_path; 
 
         $newPost->fill($DatasPost);
 
@@ -203,7 +216,8 @@ class PostController extends Controller
             'title'=>'required|max:250',
             'content'=>'required|min:5|max:100',
             'category_id'=>'required|exists:categories,id',
-            'tags'=>'exists:tags,id'
+            'tags'=>'exists:tags,id',
+            'image'=>'nullable|image'  // required|mimes:pdf,xlx,csv|max:2048
         ],[
             'title.required' => 'Titolo deve essere valorizzato',
             'title.max' => 'Hai superato i 250 caratter',
@@ -211,11 +225,21 @@ class PostController extends Controller
             'content.min' => 'Il contenuto deve avere almeno :min caratteri',
             'content.max' => 'Il contenuto deve avere almeno :max caratteri',
             'category.exists'=>'La categoria selezionata non esiste',
-            'tags' =>'Tag non esistente'
+            'tags[]' =>'Tag non esiste',
+            'image'=>'Il file deve essere un immagine'
+
+
         ]);
 
         $data = $request->all();
-
+        
+        if(array_key_exists('image',$data)){
+                if ($post->cover) {
+                        Storage::delete($post->cover);
+                }
+                $img_path = Storage::put('uploads',$data['image']);
+                $data['cover'] = $img_path;
+        }
 
         $post->fill($data);
 
@@ -257,7 +281,9 @@ class PostController extends Controller
         if ($post){
 
             $post->tags()->sync([]);
-
+            if ($post->cover) {
+                Storage::delete($post->cover);
+            }
             $post->delete();
         }
         return redirect()->route('admin.posts.index');
