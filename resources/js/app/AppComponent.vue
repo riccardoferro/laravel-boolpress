@@ -1,14 +1,19 @@
 <template>
-  <div>
-    work in progress
-  </div>
+    <div>
+        <HeaderComponent/>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
 
-export default class AppComponent {
+import HeaderComponent from '../components/HeaderComponent.vue'
 
+export default {
+  name:'AppComponent',
+  components: {HeaderComponent}
 }
+
 </script>
 
 <style scoped>
