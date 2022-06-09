@@ -8,43 +8,30 @@ require('./bootstrap');
 
 window.axios = require('axios');
 
-axios.get('http://127.0.0.1:8000/api/posts').then(results=>{
-    console.log(results);
-}).catch(e=>{
-    console.log(e);
-})
+// questo comando va a impostare il tipo di richiesta nell'header
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; 
 
- window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+// axios.get('http://127.0.0.1:8000/api/posts').then(results=>{
+//     console.log(results);
+// }).catch(e=>{
+//     console.log(e);
+// })
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
+window.Vue = require('vue');
 
 import AppComponent from './app/AppComponent'
 
+import router from './routes'
 
 // AppComponent = require ('./app/App.component.vue').default
 
 
 const app = new Vue({
     el: '#app',
-    render:(createElement) => createElement(AppComponent)
+    render:(createElement) => createElement(AppComponent),
+    router 
 });
 
 
