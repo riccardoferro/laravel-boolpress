@@ -29,7 +29,7 @@ class PostController extends Controller
 
 
         // wrapping the posts
-        $result = ['result'=>$posts,'success'=>true];
+        $result = ['results'=>$posts,'success'=>true];
 
         // return post's data transformed in file json
         return response()->json($result);
