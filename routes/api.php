@@ -22,7 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //
 Route::get('/posts', 'Api\PostController@index')->name('posts.index');
 
-//
+
+// the path for the posts detail
+Route::get('/posts/{id}', 'Api\PostController@show')->name('posts.show');
+
+
+
 Route::get('/categories', 'Api\CategoryController@index')->name('categories.index');
 
 Route::get('/categories/{post}', 'Api\CategoryController@show')->name('categories.show');

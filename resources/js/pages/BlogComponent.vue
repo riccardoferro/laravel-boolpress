@@ -35,7 +35,10 @@ export default {
 
         // console.log('mounted')
 
+        // request to take the posts
         axios.get('http://127.0.0.1:8000/api/posts').then(results=>{
+                // results with all the datas of the posts
+                console.log("console log sulla richiesta axios di tutti i post su BlogComponent ")
                 console.log(results);
                 if (results.status === 200 && results.data.success){
                     this.posts = results.data.results;

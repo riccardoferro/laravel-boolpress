@@ -64,7 +64,15 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+            // take the category and tags of the post, with get() take all the posts
+            // we have to put also the where with the id to take our post and we can pu also
+            // the method first()
+            // dump($id);
+            $post = Post::where('id',$id)->with(['category','tags'])->first();
+
+            $result = [ 'result'=>$post , 'success'=>true ];
+            // dump($result);
+            return response()->json($result);
     }
 
     /**

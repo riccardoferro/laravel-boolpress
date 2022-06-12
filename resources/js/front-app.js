@@ -29,8 +29,9 @@ import router from './routes'
 
 
 const app = new Vue({
+    // in thi chunck of code we say, take the el where is the div with id app and renderise inside the AppComponent, looking also for the routes
     el: '#app',
-    render:(createElement) => createElement(AppComponent),
+    render: (createElement) => createElement(AppComponent),
     router 
 });
 

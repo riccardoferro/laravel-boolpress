@@ -14,6 +14,8 @@ import BlogComponent from './pages/BlogComponent'
 
 import ChiSiamoComponent from './pages/ChiSiamoComponent'
 
+import SingleBlogComponent from './pages/SingleBlogComponent'
+
 
 const router = new VueRouter({
     mode: 'history',
@@ -27,6 +29,12 @@ const router = new VueRouter({
         path:'/blog',
         name:'blog',
         component: BlogComponent
+      },
+      {
+        // here the path needs a parameter ID
+        path:'/blog/:id',
+        name:'single-blog',
+        component: SingleBlogComponent
       },
       {
         path:'/chi-siamo',

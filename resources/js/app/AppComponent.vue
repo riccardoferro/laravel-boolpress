@@ -1,6 +1,8 @@
 <template>
     <div>
+        <!-- we have a fixed part -->
         <HeaderComponent/>
+        <!-- and in this tag renderise all the navigation part -->
         <router-view></router-view>
     </div>
 </template>
@@ -21,6 +23,6 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 
 </style>
