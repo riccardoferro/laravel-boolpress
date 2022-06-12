@@ -10,8 +10,13 @@
 import HeaderComponent from '../components/HeaderComponent.vue'
 
 export default {
+  
   name:'AppComponent',
-  components: {HeaderComponent}
+
+  components: {
+    HeaderComponent
+    }
+
 }
 
 </script>
